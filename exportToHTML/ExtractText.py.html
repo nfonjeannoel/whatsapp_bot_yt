@@ -1,0 +1,133 @@
+<html>
+<head>
+<title>ExtractText.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #808080;}
+.s3 { color: #6a8759;}
+.s4 { color: #6897bb;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+ExtractText.py</font>
+</center></td></tr></table>
+<pre><span class="s0">import </span><span class="s1">pyautogui </span><span class="s0">as </span><span class="s1">pt</span>
+<span class="s0">from </span><span class="s1">time </span><span class="s0">import </span><span class="s1">sleep</span>
+<span class="s0">import </span><span class="s1">pyperclip</span>
+<span class="s0">import </span><span class="s1">random</span>
+
+<span class="s2"># pagezoom = 54</span>
+<span class="s1">lines = []</span>
+<span class="s1">prevLine = </span><span class="s3">&quot;&quot;</span>
+
+<span class="s1">x_col1 = </span><span class="s4">540</span>
+<span class="s1">x_col2 = </span><span class="s4">750</span>
+<span class="s1">y_colxy = </span><span class="s4">150</span>
+
+<span class="s2"># page_number = 0</span>
+
+<span class="s1">skips = </span><span class="s4">95</span>
+
+
+<span class="s0">def </span><span class="s1">changePageNumber(page_number):</span>
+    <span class="s2"># x = 565</span>
+    <span class="s2"># y = 100</span>
+    <span class="s2"># global page_number</span>
+    <span class="s2"># page_number += 1</span>
+    <span class="s1">pt.moveTo(x_col1 + </span><span class="s4">25</span><span class="s0">, </span><span class="s1">y_colxy - </span><span class="s4">50</span><span class="s1">)</span>
+    <span class="s1">pt.leftClick()</span>
+    <span class="s1">pt.typewrite(str(page_number)</span><span class="s0">, </span><span class="s1">interval=</span><span class="s4">.00001</span><span class="s1">)</span>
+    <span class="s1">pt.moveRel(-</span><span class="s4">50</span><span class="s0">, </span><span class="s4">0</span><span class="s1">)</span>
+    <span class="s1">pt.click()</span>
+
+
+<span class="s0">def </span><span class="s1">goToFirstColumn():</span>
+    <span class="s1">pt.moveTo(x_col1</span><span class="s0">, </span><span class="s1">y_colxy)</span>
+    <span class="s0">for </span><span class="s1">i </span><span class="s0">in </span><span class="s1">range(skips):</span>
+        <span class="s1">pt.tripleClick()</span>
+        <span class="s1">smallWait()</span>
+        <span class="s1">getLineText()</span>
+        <span class="s1">moveDown()</span>
+
+
+<span class="s0">def </span><span class="s1">getLineText():</span>
+    <span class="s1">thisLine = copy_clipboard()</span>
+    <span class="s2"># global prevLine</span>
+    <span class="s2"># prevLine = thisLine</span>
+    <span class="s1">addToList(thisLine)</span>
+    <span class="s2"># print(line)</span>
+
+
+<span class="s0">def </span><span class="s1">moveDown():</span>
+    <span class="s1">pt.moveRel(</span><span class="s4">0</span><span class="s0">, </span><span class="s4">6.9</span><span class="s0">, </span><span class="s4">0.0001</span><span class="s1">)</span>
+
+
+<span class="s0">def </span><span class="s1">smallWait():</span>
+    <span class="s1">sleep(</span><span class="s4">0.0001</span><span class="s1">)</span>
+
+
+<span class="s0">def </span><span class="s1">addToList(thisLine):</span>
+    <span class="s0">global </span><span class="s1">prevLine</span>
+    <span class="s0">if </span><span class="s1">prevLine == thisLine:</span>
+        <span class="s2"># print(&quot;duplicate&quot;)</span>
+        <span class="s0">None</span>
+    <span class="s0">else</span><span class="s1">:</span>
+        <span class="s2"># print(&quot;not equal&quot;)</span>
+        <span class="s1">lines.append(thisLine)</span>
+        <span class="s1">prevLine = thisLine</span>
+
+
+<span class="s0">def </span><span class="s1">goToSecondColumn():</span>
+    <span class="s1">pt.moveTo(x_col2</span><span class="s0">, </span><span class="s1">y_colxy)</span>
+    <span class="s0">for </span><span class="s1">i </span><span class="s0">in </span><span class="s1">range(skips):</span>
+        <span class="s1">pt.tripleClick()</span>
+        <span class="s1">smallWait()</span>
+        <span class="s1">getLineText()</span>
+        <span class="s1">moveDown()</span>
+
+
+<span class="s0">def </span><span class="s1">copy_clipboard():</span>
+    <span class="s1">pt.hotkey(</span><span class="s3">'ctrl'</span><span class="s0">, </span><span class="s3">'c'</span><span class="s1">)</span>
+    <span class="s1">sleep(</span><span class="s4">.001</span><span class="s1">)  </span><span class="s2"># ctrl-c is usually very fast but your program may execute faster</span>
+    <span class="s0">return </span><span class="s1">pyperclip.paste()</span>
+
+<span class="s0">def </span><span class="s1">getResults():</span>
+    <span class="s1">sleep(</span><span class="s4">3</span><span class="s1">)</span>
+    <span class="s1">print(</span><span class="s3">&quot;start&quot;</span><span class="s1">)</span>
+    <span class="s0">for </span><span class="s1">i </span><span class="s0">in </span><span class="s1">range(</span><span class="s4">2</span><span class="s1">):</span>
+        <span class="s1">changePageNumber(i + </span><span class="s4">1</span><span class="s1">)</span>
+        <span class="s1">goToFirstColumn()</span>
+        <span class="s1">goToSecondColumn()</span>
+    <span class="s0">with </span><span class="s1">open(</span><span class="s3">&quot;result.txt&quot;</span><span class="s0">, </span><span class="s3">&quot;w&quot;</span><span class="s1">) </span><span class="s0">as </span><span class="s1">f:</span>
+        <span class="s0">for </span><span class="s1">line </span><span class="s0">in </span><span class="s1">lines:</span>
+            <span class="s1">f.write(line)</span>
+    <span class="s1">f.close()</span>
+    <span class="s1">print(</span><span class="s3">&quot;done&quot;</span><span class="s1">)</span>
+
+
+    <span class="s2"># with open(&quot;result.txt&quot;, &quot;r&quot;) as f:</span>
+    <span class="s2">#     lines = f.readlines()</span>
+    <span class="s2">#     for line in lines:</span>
+    <span class="s2">#         print(line)</span>
+
+
+<span class="s0">def </span><span class="s1">reformatResults():</span>
+    <span class="s0">None</span>
+
+
+<span class="s0">if </span><span class="s1">__name__ == </span><span class="s3">'__main__'</span><span class="s1">:</span>
+    <span class="s1">getResults()</span>
+    <span class="s1">reformatResults()</span>
+
+
+
+
+
+</pre>
+</body>
+</html>
